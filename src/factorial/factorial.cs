@@ -86,8 +86,9 @@ namespace math.numerics
         }
 
         /// <summary>
-        /// Computes the factorial of an integer.
+        /// Computes the factorial of an integer >= 0.
         /// </summary>
+        /// <returns>A scalar value x! for x >= 0</returns>
         public static BigInteger Factorial(BigInteger x)
         {
             if (x < 0)
