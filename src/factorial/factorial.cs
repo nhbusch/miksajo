@@ -65,10 +65,10 @@ namespace math.numerics
         };
 
         /// <summary>
-        /// Computes the factorial function x -> x! of an integer number > 0. The function can represent all number up
+        /// Computes the factorial function x -> x! of an integer number >= 0. The function can represent all number up
         /// to 22! exactly, all numbers up to 170! using a double representation. All larger values will overflow.
         /// </summary>
-        /// <returns>A scalar value x! for x > 0</returns>
+        /// <returns>A scalar value x! for x >= 0</returns>
         /// <exception cref="ArgumentOutOfRangeException" />
         public static double Factorial(int x)
         {
