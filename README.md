@@ -1,2 +1,3 @@
-Test library
+NETTEST
 ------------
+A .NET test project.
