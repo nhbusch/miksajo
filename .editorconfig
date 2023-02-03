@@ -26,7 +26,7 @@ indent_size = 2
 indent_size = 2
 
 # Dotnet code style settings:
-[*.{cs,vb}]
+[*.{cs}]
 # Sort using and Import directives with System.* appearing first
 dotnet_sort_system_directives_first = true
 # Use "this." and "Me." everywhere
