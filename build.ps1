@@ -13,6 +13,10 @@ Param(
     [ValidateSet('Debug', 'Release')]
     [string]$Configuration = 'Debug',
 
+    # Clean previous build
+    [Parameter()]
+    [switch]$Clean = $false,
+
     # Run tests after building
     [Parameter()]
     [switch]$Test = $false,
@@ -24,27 +28,28 @@ Param(
 )
 
 $target = "$PSScriptRoot/src/factorial.test/factorial.test.csproj"
-# FIXME argument splatting?
-# $buildCLI = "dotnet build `"$PSScriptRoot\src\Nerdbank.GitVersioning.sln`" /m /verbosity:$MsBuildVerbosity /nologo /p:Platform=`"Any CPU`" /t:build,pack"
-$buildArgs = "--nologo --verbosity $Verbosity"
-
-if ($Configuration) {
-    $buildArgs += " --configuration $Configuration"
-}
+$buildArgs = "--nologo --configuration $Configuration --verbosity $Verbosity $target"
 
 Push-Location .
 try {
     if ($PSCmdlet.ShouldProcess($target, "dotnet")) {
-        #FIXME remove boilerplate, use array splatting
+        # FIXME unconditionally clean?
+        if ($Clean) {
+            Invoke-Expression ("dotnet clean " + $buildArgs)
+            if ($LASTEXITCODE -ne 0) {
+                throw "dotnet clean failed!"
+            }
+            Remove-Item $PSScriptRoot/bin -Recurse -Force
+            Remove-Item $PSScriptRoot/obj -Recurse -Force
+        }
+
         if ($Test) {
-            $buildCmd = "dotnet test " + $buildArgs
-            Invoke-Expression $buildCmd
+            Invoke-Expression ("dotnet test " + $buildArgs)
             if ($LASTEXITCODE -ne 0) {
                 throw "dotnet test failed!"
             }
         } else {
-            $buildCmd = "dotnet build " + $buildArgs
-            Invoke-Expression $buildCmd
+            Invoke-Expression ("dotnet build " + $buildArgs)
             if ($LASTEXITCODE -ne 0) {
                 throw "dotnet build failed!"
             }
